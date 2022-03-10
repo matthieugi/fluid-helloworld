@@ -17,16 +17,18 @@ const containerSchema = {
 const root = document.getElementById("content");
 
 const createNewDice = async () => {
-    const { container } = await client.createContainer(containerSchema);
+    const { container, services } = await client.createContainer(containerSchema);
     container.initialObjects.diceMap.set(diceValueKey, 1);
     const id = await container.attach();
     renderDiceRoller(container.initialObjects.diceMap, root);
+    // renderUsers(services.audience, root);
     return id;
 }
 
 const loadExistingDice = async (id) => {
-    const { container } = await client.getContainer(id, containerSchema);
+    const { container, services } = await client.getContainer(id, containerSchema);
     renderDiceRoller(container.initialObjects.diceMap, root);
+    // renderUsers(services.audience, root);
 }
 
 async function start() {
@@ -40,26 +42,7 @@ async function start() {
 
 start().catch((error) => console.error(error));
 
-
-// Define the view
-
-const template = document.createElement("template");
-
-template.innerHTML = `
-  <style>
-    .wrapper { text-align: center }
-    .dice { font-size: 200px }
-    .roll { font-size: 50px;}
-  </style>
-  <div class="wrapper">
-    <div class="dice"></div>
-    <button class="roll"> Roll </button>
-  </div>
-`
-
 const renderDiceRoller = (diceMap, elem) => {
-    elem.appendChild(template.content.cloneNode(true));
-
     const rollButton = elem.querySelector(".roll");
     const dice = elem.querySelector(".dice");
 
@@ -78,3 +61,12 @@ const renderDiceRoller = (diceMap, elem) => {
     // Use the changed event to trigger the rerender whenever the value changes.
     diceMap.on("valueChanged", updateDice);
 }
+
+// const renderUsers = (audience, elem) => {
+//     const usersList = elem.querySelector('.users');
+
+//     audience.on('membersChanged', () => {
+//         usersList.textContent = audience.getMembers().values().join('<br/>');
+//         console.log(audience.getMembers())
+//     })
+// }
