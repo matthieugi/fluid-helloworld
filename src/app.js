@@ -21,14 +21,14 @@ const createNewDice = async () => {
     container.initialObjects.diceMap.set(diceValueKey, 1);
     const id = await container.attach();
     renderDiceRoller(container.initialObjects.diceMap, root);
-    // renderUsers(services.audience, root);
+    renderUsers(services, root);
     return id;
 }
 
 const loadExistingDice = async (id) => {
     const { container, services } = await client.getContainer(id, containerSchema);
     renderDiceRoller(container.initialObjects.diceMap, root);
-    // renderUsers(services.audience, root);
+    renderUsers(services, root);
 }
 
 async function start() {
@@ -62,11 +62,11 @@ const renderDiceRoller = (diceMap, elem) => {
     diceMap.on("valueChanged", updateDice);
 }
 
-// const renderUsers = (audience, elem) => {
-//     const usersList = elem.querySelector('.users');
+const renderUsers = (services, elem) => {
+    const usersList = elem.querySelector('.connectedUsers');
 
-//     audience.on('membersChanged', () => {
-//         usersList.textContent = audience.getMembers().values().join('<br/>');
-//         console.log(audience.getMembers())
-//     })
-// }
+    services.audience.on('membersChanged', () => {
+        const users = Array.from(services.audience.getMembers().values()).map(user => user.userId);
+        usersList.innerHTML = users.join(' <br/> ');
+    })
+}

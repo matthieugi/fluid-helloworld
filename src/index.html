@@ -15,15 +15,21 @@
     <body style="margin: 0; height: 100%">
         <div id="content" style="min-height: 100%">
             <style>
-                .wrapper { text-align: center }
+                .wrapper { text-align: center; align-items: center; display: flex; }
+                .game { flex-grow: 1; }
                 .dice { font-size: 200px }
                 .roll { font-size: 50px;}
               </style>
               <div class="wrapper">
-                <div class="dice"></div>
-                <button class="roll"> Roll </button>
+                <div class="users">
+                    <h2>Connected Users</h2>
+                    <div class="connectedUsers"></div>
+                </div>
+                <div class="game">
+                    <div class="dice"></div>
+                    <button class="roll"> Roll </button>
+                </div>
               </div>
-              <div class="users"></div>
         </div>
     </body>
 </html>
