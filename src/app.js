@@ -4,17 +4,32 @@
  */
 
 import { SharedMap } from "fluid-framework";
-import { TinyliciousClient } from "@fluidframework/tinylicious-client";
+import { AzureClient } from "@fluidframework/azure-client";
+import { InsecureTokenProvider } from "@fluidframework/test-client-utils";
+import { v4 as uuid } from 'uuid';
 
 export const diceValueKey = "dice-value-key";
+const root = document.getElementById("content");
 
 // Load container and render the app
 
-const client = new TinyliciousClient();
+const userId = uuid();
+
+const fluidrelay_accessKey = process.env.FLUIDRELAY_ACCESSKEY;
+
+const connectionConfig = { 
+    connection: {
+        tenantId: "dc24fade-1619-423f-86bc-e693b9b32462",
+        tokenProvider: new InsecureTokenProvider(fluidrelay_accessKey, { id: userId }),
+        orderer: "https://alfred.westeurope.fluidrelay.azure.com",
+        storage: "https://historian.westeurope.fluidrelay.azure.com"
+    }
+}
+
+const client = new AzureClient(connectionConfig);
 const containerSchema = {
     initialObjects: { diceMap: SharedMap }
 };
-const root = document.getElementById("content");
 
 const createNewDice = async () => {
     const { container, services } = await client.createContainer(containerSchema);
@@ -65,7 +80,9 @@ const renderDiceRoller = (diceMap, elem) => {
 const renderUsers = (services, elem) => {
     const usersList = elem.querySelector('.connectedUsers');
 
+    // When a user is connected or disconnected
     services.audience.on('membersChanged', () => {
+        // Fetch connected users to the audience object and update list on the screen 
         const users = Array.from(services.audience.getMembers().values()).map(user => user.userId);
         usersList.innerHTML = users.join(' <br/> ');
     })
