@@ -13,15 +13,8 @@
         "start:server": "npx tinylicious@latest"
     },
     "dependencies": {
-<<<<<<< HEAD
-        "@fluidframework/azure-client": "^0.57.1",
-        "@fluidframework/test-client-utils": "^0.57.1",
-        "fluid-framework": "^0.57.1",
-        "uuid": "^8.3.2"
-=======
         "@fluidframework/tinylicious-client": "^0.56.5",
         "fluid-framework": "^0.56.5"
->>>>>>> 5e1cc86b6d3dde9319c938c03a0aa59d15906489
     },
     "devDependencies": {
         "@fluidframework/tinylicious-client": "^0.48.5",
